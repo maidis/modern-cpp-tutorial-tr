@@ -1,4 +1,4 @@
-<img src="assets/cover-2nd-en.png" alt="logo" height="550" align="right" />
+<img src="assets/cover-2nd-tr.png" alt="logo" height="550" align="right" />
 
 # Modern C++ Eğitimi: Şıp Diye C++11/14/17/20
 
