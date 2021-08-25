@@ -67,7 +67,7 @@ void lambda_reference_capture() {
 }
 ```
 
-**3. 隐式捕获**
+#### 3. 隐式捕获
 
 手动书写捕获列表有时候是非常复杂的，这种机械性的工作可以交给编译器来处理，这时候可以在捕获列表中写一个 
 `&` 或 `=` 向编译器声明采用引用捕获或者值捕获.
@@ -79,7 +79,7 @@ void lambda_reference_capture() {
 - \[&\] 引用捕获, 让编译器自行推导引用列表
 - \[=\] 值捕获, 让编译器自行推导值捕获列表
 
-**4. 表达式捕获**
+#### 4. 表达式捕获
 
 > 这部分内容需要了解后面马上要提到的右值引用以及智能指针
 
@@ -90,15 +90,15 @@ C++14 给与了我们方便，允许捕获的成员用任意的表达式进行�
 
 ```cpp
 #include <iostream>
-#include <utility>
+#include <memory>  // std::make_unique
+#include <utility> // std::move
 
-int main() {
+void lambda_expression_capture() {
     auto important = std::make_unique<int>(1);
     auto add = [v1 = 1, v2 = std::move(important)](int x, int y) -> int {
         return x+y+v1+(*v2);
     };
     std::cout << add(3,4) << std::endl;
-    return 0;
 }
 ```
 
@@ -293,7 +293,7 @@ int main()
 
     const std::string& lv2 = lv1 + lv1; // 合法, 常量左值引用能够延长临时变量的生命周期
     // lv2 += "Test"; // 非法, 常量引用无法被修改
-    std::cout << lv2 << std::endl; // string,string
+    std::cout << lv2 << std::endl; // string,string,
 
     std::string&& rv2 = lv1 + lv2; // 合法, 右值引用延长临时对象生命周期
     rv2 += "Test"; // 合法, 非常量引用能够修改临时变量
@@ -544,7 +544,7 @@ constexpr _Tp&& forward(typename std::remove_reference<_Tp>::type&& __t) noexcep
 而 `std::is_lvalue_reference` 用于检查类型推导是否正确，在 `std::forward` 的第二个实现中
 检查了接收到的值确实是一个左值，进而体现了坍缩规则。
 
-当 `std::forward` 接受左值时，`_Tp` 被推导为左值，而所以返回值为左值；而当其接受右值时，
+当 `std::forward` 接受左值时，`_Tp` 被推导为左值，所以返回值为左值；而当其接受右值时，
 `_Tp` 被推导为 右值引用，则基于坍缩规则，返回值便成为了 `&& + &&` 的右值。
 可见 `std::forward` 的原理在于巧妙的利用了模板类型推导中产生的差异。
 

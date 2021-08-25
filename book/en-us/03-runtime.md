@@ -105,6 +105,10 @@ The type of the captured variable being declared is judged according to the expr
 and the judgment is the same as using `auto`:
 
 ```cpp
+#include <iostream>
+#include <memory>  // std::make_unique
+#include <utility> // std::move
+
 void lambda_expression_capture() {
     auto important = std::make_unique<int>(1);
     auto add = [v1 = 1, v2 = std::move(important)](int x, int y) -> int {
@@ -341,7 +345,7 @@ int main()
 
     const std::string& lv2 = lv1 + lv1; // legal, const lvalue reference can extend temp variable's lifecycle
     // lv2 += "Test";                   // illegal, const ref can't be modified
-    std::cout << lv2 << std::endl;      // string,string
+    std::cout << lv2 << std::endl;      // string,string,
 
     std::string&& rv2 = lv1 + lv2;      // legal, rvalue ref extend lifecycle
     rv2 += "string";                    // legal, non-const reference can be modified
